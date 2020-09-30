@@ -1,67 +1,36 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  FlatList,
-} from "react-native";
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
+import { View, FlatList } from "react-native";
 
 export default function App() {
-  const [newGoal, setNewGoal] = useState("");
   const [goals, setGoals] = useState([]);
 
-  const changeHandler = (textInput) => {
-    setNewGoal(textInput);
-  };
-  const addGoalHandler = () => {
+  const addGoalHandler = (newGoal) => {
     setGoals((currentGoals) => [
       ...currentGoals,
       { id: goals.length.toString(), value: newGoal },
     ]);
-    setNewGoal(" ");
+  };
+  const deleteGoal = (targetId) => {
+    setGoals((currentGoals) =>
+      currentGoals.filter((value) => value.id !== targetId)
+    );
   };
   return (
     <View style={{ paddingTop: 30 }}>
-      <View style={styles.mainScreen}>
-        <TextInput
-          placeholder="Pleae enter your goal"
-          style={styles.textInputCotainer}
-          onChangeText={changeHandler}
-          value={newGoal}
-        />
-        <Button title="Add" color="#841584" onPress={addGoalHandler} />
-      </View>
+      <GoalInput addGoalHandler={addGoalHandler} />
       <FlatList
         data={goals}
         keyExtractor={(item) => item.id}
         renderItem={(goalsData) => (
-          <View style={styles.listGoals} onT>
-            <Text>{goalsData.item.value}</Text>
-          </View>
+          <GoalItem
+            data={goalsData.item.value}
+            deleteGoal={deleteGoal}
+            goalId={goalsData.item.id}
+          />
         )}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  mainScreen: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 4,
-  },
-  textInputCotainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 4,
-  },
-  listGoals: {
-    margin: 5,
-    padding: 10,
-    backgroundColor: "#ccc",
-    borderColor: "black",
-    borderWidth: 1,
-  },
-});
