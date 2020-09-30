@@ -5,11 +5,12 @@ import { View, FlatList } from "react-native";
 
 export default function App() {
   const [goals, setGoals] = useState([]);
+  const date = new Date();
 
   const addGoalHandler = (newGoal) => {
     setGoals((currentGoals) => [
       ...currentGoals,
-      { id: goals.length.toString(), value: newGoal },
+      { id: goals.length.toString(), value: newGoal, timeStamp: Date.now() },
     ]);
   };
   const deleteGoal = (targetId) => {
@@ -28,6 +29,8 @@ export default function App() {
             data={goalsData.item.value}
             deleteGoal={deleteGoal}
             goalId={goalsData.item.id}
+            date={goalsData.item.timeStamp}
+            time={goalsData.item.timeStamp}
           />
         )}
       />
