@@ -43,7 +43,7 @@ const GoalItem = (props) => {
       {infoText ? (
         <View>
           <Text style={{ fontSize: 8, fontWeight: "700", padding: "auto" }}>
-            Created on {Date(props.date).toString()}
+            Created on {props.date}
           </Text>
         </View>
       ) : null}
