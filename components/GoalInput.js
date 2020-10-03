@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, TextInput, StyleSheet, Button } from "react-native";
+import { View, TextInput, StyleSheet, Button, Modal } from "react-native";
+import { Button as Buttonss } from "react-native-elements";
 
 const GoalInput = (props) => {
   const [newGoal, setNewGoal] = useState("");
@@ -8,40 +9,62 @@ const GoalInput = (props) => {
   };
 
   return (
-    <View style={styles.mainScreen}>
-      <TextInput
-        placeholder="Pleae enter your goal"
-        style={styles.textInputCotainer}
-        onChangeText={changeHandler}
-        value={newGoal}
-      />
-      <Button
-        title="Add"
-        color="#841584"
-        onPress={() => {
-          if (newGoal === "") return;
-          setNewGoal("");
-          props.addGoalHandler(newGoal);
-        }}
-      />
-      {/* <Button
-        title="Add"
-        color="green"
-        onPress={props.addGoalHandler.bind(this, newGoal)}
-      /> */}
-    </View>
+    <Modal visible={props.showAddGoal} transparent={true}>
+      <View style={styles.mainScreen}>
+        <View style={{ width: "70%", backgroundColor: "white", opacity: 1 }}>
+          <TextInput
+            placeholder="Pleae enter your goal"
+            style={styles.textInput}
+            onChangeText={changeHandler}
+            value={newGoal}
+          />
+        </View>
+        <View style={styles.AddButton}>
+          <Buttonss
+            color="black"
+            title="Add"
+            loading={props.inProgress}
+            onPress={() => {
+              if (props.inProgress) return;
+              if (newGoal === "") return;
+              props.activateProgress();
+              setNewGoal("");
+              props.addGoalHandler(newGoal);
+            }}
+          />
+        </View>
+        <View style={styles.AddButton}>
+          <Button
+            disabled={props.inProgress}
+            title="Cancel"
+            color="red"
+            onPress={() => {
+              setNewGoal("");
+              props.hideAddGoalModal();
+            }}
+          />
+        </View>
+      </View>
+    </Modal>
   );
 };
 export default GoalInput;
 const styles = StyleSheet.create({
-  textInputCotainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    margin: 4,
+  textInput: {
+    borderBottomColor: "#841584",
+    borderBottomWidth: 2,
+    margin: 3,
+    padding: 3,
   },
   mainScreen: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
     margin: 4,
+  },
+  AddButton: {
+    width: "40%",
+    padding: 3,
+    margin: 3,
   },
 });
